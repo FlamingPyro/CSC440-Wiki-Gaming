@@ -6,3 +6,4 @@ Team Rules
   Complete tasks in timely manner
   Remain Respectful to all team members
   Discuss complicated tasks
+
