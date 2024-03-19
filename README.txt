@@ -13,7 +13,7 @@ Requirements
   As a User, I want to be able to speak to others, so that I can know what others think about these games.
   As a User, I want a User Profile, so that I can know what I have said and save what I am interested in.
   As a User, I want to vote on games and comments, so that I can say what I enjoy and see what others also enjoy.
-  As a User, I want to be buying system, so that I can quickly buy games that I find interesting.
+  As a User, I want a market system, so that I can quickly buy games that I find interesting.
 
 Tools
   Front end programming language: HTML/CSS
