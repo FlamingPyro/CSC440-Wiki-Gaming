@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title -%}
+	MINECRAFT
+{% endblock title %}
+
+{% block content %}
+    <img src="{{ urlfor('static', filename='images/minecraft.png') }}" class="image" />
+    <p>Minecraft is a sandbox survival game where the player's only limit is their imagination. Explore, build, and craft in an endless world.</p>
+    <p>The game was released in 2011, and has been beloved by fans ever since.</p>
+
+    <img src="{{ urlfor('static', filename='images/minecraft_ed.png') }}" class="image" />
+    <img src="{{ urlfor('static', filename='images/minecraft_wh.png') }}" class="image" />
+    <img src="{{ urlfor('static', filename='images/minecraft_gu.png') }}" class="image" />
+    <img src="{{ urlfor('static', filename='images/minecraft_wa.png') }}" class="image" />
+    <p>There are four bosses in Minecraft: The Ender Dragon, the Wither, the Guardian, and the Warden.</p>
+{% endblock %}
+
+{% block sidebar %}
+{% if page.tags %}
+<h3>Tags</h3>
+  <ul>
+      {% for tag in page.tags.split(',') %}
+        <li><a href="{{ url_for('wiki.tag', name=tag.strip()) }}">{{ tag|trim }}</a></li>
+      {% endfor %}
+  </ul>
+{% endif %}
+<h3>Actions</h3>
+<ul class="nav nav-tabs nav-stacked">
+	<li><a href="{{ url_for('wiki.edit', url=page.url) }}">Edit</a></li>
+  <li><a href="{{ url_for('wiki.move', url=page.url) }}">Move</a></li>
+  <li><a href="#confirmDelete" data-toggle="modal" class="text-error">Delete</a></li>
+</ul>
+{% endblock sidebar %}

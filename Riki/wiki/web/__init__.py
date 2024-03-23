@@ -6,8 +6,8 @@ from flask import g
 from flask_login import LoginManager
 from werkzeug.local import LocalProxy
 
-from wiki.core import Wiki
-from wiki.web.user import UserManager
+from Riki.wiki.core import Wiki
+from Riki.wiki.web.user import UserManager
 
 class WikiError(Exception):
     pass
@@ -43,7 +43,7 @@ def create_app(directory):
 
     loginmanager.init_app(app)
 
-    from wiki.web.routes import bp
+    from Riki.wiki.web.routes import bp
     app.register_blueprint(bp)
 
     return app

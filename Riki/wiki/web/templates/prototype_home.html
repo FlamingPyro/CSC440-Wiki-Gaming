@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title -%}
+	Wiki Gaming
+{% endblock title %}
+
+{% block content %}
+    <h3>HELLDIVERS II</h3>
+    <img src="{{ urlfor('static', filename='images/helldivers.png') }}" class="image" />
+    <p>Helldivers 2 is a multiplayer 3rd person shooter where you fight against different enemies to liberate planets and defend Super Earth.</p>
+
+    <h3>PALWORLD</h3>
+    <img src="{{ urlfor('static', filename='images/palworld.png') }}" class="image" />
+    <p>Palworld is an open world RPG where the player can capture Pals, build structures, and explore the world to their heart's content.</p>
+
+    <h3>MINECRAFT</h3>
+    <img src="{{ urlfor('static', filename='images/minecraft.png') }}" class="image" />
+    <p>Minecraft is a sandbox survival game where the player's only limit is their imagination. Explore, build, and craft in an endless world.</p>
+{% endblock %}

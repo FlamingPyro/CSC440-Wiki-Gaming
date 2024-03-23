@@ -10,9 +10,9 @@ from wtforms import PasswordField
 from wtforms.validators import InputRequired
 from wtforms.validators import ValidationError
 
-from wiki.core import clean_url
-from wiki.web import current_wiki
-from wiki.web import current_users
+from Riki.wiki.core import clean_url
+from Riki.wiki.web import current_wiki
+from Riki.wiki.web import current_users
 
 
 class URLForm(FlaskForm):
