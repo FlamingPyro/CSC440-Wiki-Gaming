@@ -13,14 +13,14 @@ from flask_login import login_required
 from flask_login import login_user
 from flask_login import logout_user
 
-from Riki.wiki.core import Processor
-from Riki.wiki.web.forms import EditorForm
-from Riki.wiki.web.forms import LoginForm
-from Riki.wiki.web.forms import SearchForm
-from Riki.wiki.web.forms import URLForm
-from Riki.wiki.web import current_wiki
-from Riki.wiki.web import current_users
-from Riki.wiki.web.user import protect
+from wiki.core import Processor
+from wiki.web.forms import EditorForm
+from wiki.web.forms import LoginForm
+from wiki.web.forms import SearchForm
+from wiki.web.forms import URLForm
+from wiki.web import current_wiki
+from wiki.web import current_users
+from wiki.web.user import protect
 
 
 bp = Blueprint('wiki', __name__)
