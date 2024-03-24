@@ -18,6 +18,7 @@ from wiki.web.forms import EditorForm
 from wiki.web.forms import LoginForm
 from wiki.web.forms import SearchForm
 from wiki.web.forms import URLForm
+from wiki.web.forms import ShoppingInfoForm
 from wiki.web import current_wiki
 from wiki.web import current_users
 from wiki.web.user import protect
@@ -72,6 +73,13 @@ def edit(url):
         flash('"%s" was saved.' % page.title, 'success')
         return redirect(url_for('wiki.display', url=url))
     return render_template('editor.html', form=form, page=page)
+
+@bp.route('/shopping_cart/', methods=['GET', 'POST'])
+@protect
+def shopping_cart():
+    form = ShoppingInfoForm()
+
+    return render_template('shopping_cart.html', form=form)
 
 
 @bp.route('/preview/', methods=['POST'])
