@@ -7,6 +7,7 @@ from wtforms import BooleanField
 from wtforms import StringField
 from wtforms import TextAreaField
 from wtforms import PasswordField
+from wtforms.fields.simple import SubmitField
 from wtforms.validators import InputRequired
 from wtforms.validators import ValidationError
 
@@ -55,3 +56,14 @@ class LoginForm(FlaskForm):
             return
         if not user.check_password(field.data):
             raise ValidationError('Username and password do not match.')
+
+class ShoppingInfoForm(FlaskForm):
+    name = StringField('Name: ', [InputRequired()])
+    address = StringField('Address: ', [InputRequired()])
+    city = StringField('City:', [InputRequired()])
+    state = StringField('State: ', [InputRequired()])
+    zipcode = StringField('ZIP: ', [InputRequired()])
+    email = StringField('Email: ', [InputRequired()])
+    phone_number = StringField('Phone#: ', [InputRequired()])
+
+    proceed_to_checkout = SubmitField('Proceed to Checkout')
