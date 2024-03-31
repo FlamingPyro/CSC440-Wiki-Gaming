@@ -17,11 +17,12 @@ from wiki.core import Processor
 from wiki.web.forms import EditorForm
 from wiki.web.forms import LoginForm
 from wiki.web.forms import SearchForm
+from wiki.web.forms import CreateForm
 from wiki.web.forms import URLForm
 from wiki.web import current_wiki
 from wiki.web import current_users
 from wiki.web.user import protect
-
+from wiki.web.user import UserManager
 
 bp = Blueprint('wiki', __name__)
 
@@ -155,9 +156,18 @@ def user_index():
     pass
 
 
-@bp.route('/user/create/')
+@bp.route('/user/create/', methods=['GET', 'POST'])
 def user_create():
-    pass
+    form = CreateForm()
+    if form.validate_on_submit():
+        username = form.name.data
+        password = form.password.data
+        user = (current_users.add_user(name=username, password=password, authentication_method='cleartext'))
+        login_user(user)
+        user.set('authenticated', True)
+        flash('Account Creation successful.', 'success')
+        return redirect(request.args.get("next") or url_for('wiki.index'))
+    return render_template('account.html', form=form)
 
 
 @bp.route('/user/<int:user_id>/')
@@ -179,4 +189,3 @@ def user_delete(user_id):
 @bp.errorhandler(404)
 def page_not_found(error):
     return render_template('404.html'), 404
-

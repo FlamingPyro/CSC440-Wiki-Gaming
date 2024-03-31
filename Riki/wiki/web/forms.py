@@ -55,3 +55,16 @@ class LoginForm(FlaskForm):
             return
         if not user.check_password(field.data):
             raise ValidationError('Username and password do not match.')
+
+
+class CreateForm(FlaskForm):
+    name = StringField('', [InputRequired()])
+    password = PasswordField('', [InputRequired()])
+
+    def validate_name(form, field):
+        user = current_users.get_user(field.data)
+        if user:
+            raise ValidationError('This username already exists.')
+
+    def validate_password(form, field):
+        pass  # todo

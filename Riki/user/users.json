@@ -13,11 +13,25 @@
     "authenticated": true,
     "roles": []
   },
-    "evie": {
+  "evie": {
     "active": true,
     "authentication_method": "cleartext",
     "password": "test",
     "authenticated": true,
     "roles": []
+  },
+  "name2": {
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "authenticated": true,
+    "password": "1234"
+  },
+  "potato": {
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "authenticated": true,
+    "password": "yipppee"
   }
 }
