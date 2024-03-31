@@ -22,10 +22,10 @@ from wiki.web.forms import ShoppingInfoForm
 from wiki.web import current_wiki
 from wiki.web import current_users
 from wiki.web.user import protect
-
+from .models import ShoppingInfo
+from .extensions import db
 
 bp = Blueprint('wiki', __name__)
-
 
 @bp.route('/')
 @protect
@@ -78,9 +78,27 @@ def edit(url):
 @protect
 def shopping_cart():
     form = ShoppingInfoForm()
+        if form.validate_on_submit():
+        new_info = ShoppingInfo(
+            name=form.name.data,
+            address=form.address.data,
+            city=form.city.data,
+            state=form.state.data,
+            zipcode=form.zipcode.data,
+            email=form.email.data,
+            phone_number=form.phone_number.data
+        )
+        db.session.add(new_info)
+        db.session.commit()
 
+        return redirect(url_for('wiki.success_page'))
     return render_template('shopping_cart.html', form=form)
 
+@bp.route('/success_page', methods=['GET', 'POST'])
+@protect
+def success_page():
+    shopping_info = ShoppingInfo.query.all()
+    return render_template('success_page.html', shopping_info=shopping_info)
 
 @bp.route('/preview/', methods=['POST'])
 @protect
