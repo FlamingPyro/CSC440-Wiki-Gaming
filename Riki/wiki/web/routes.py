@@ -18,9 +18,11 @@ from wiki.web.forms import EditorForm
 from wiki.web.forms import LoginForm
 from wiki.web.forms import SearchForm
 from wiki.web.forms import URLForm
+from wiki.web.forms import CommentForm
 from wiki.web import current_wiki
 from wiki.web import current_users
 from wiki.web.user import protect
+
 
 
 bp = Blueprint('wiki', __name__)
@@ -81,7 +83,6 @@ def preview():
     processor = Processor(request.form['body'])
     data['html'], data['body'], data['meta'] = processor.process()
     return data['html']
-
 
 @bp.route('/move/<path:url>/', methods=['GET', 'POST'])
 @protect
@@ -149,6 +150,16 @@ def user_logout():
     flash('Logout successful.', 'success')
     return redirect(url_for('wiki.index'))
 
+@bp.route('/comments/', methods=('GET', 'POST'))
+@protect
+def comments():
+    form = CommentForm()
+    page = {'title': 'Comments Page'}
+    if "like" in request.form:
+        return render_template('404.html', page=page, form=form)
+    if "dislike" in request.form:
+        return render_template('404.html')
+    return render_template('comments.html', page=page, form=form)
 
 @bp.route('/user/')
 def user_index():
