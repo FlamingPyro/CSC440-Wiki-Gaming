@@ -7,6 +7,7 @@ from wtforms import BooleanField
 from wtforms import StringField
 from wtforms import TextAreaField
 from wtforms import PasswordField
+from wtforms.fields.simple import SubmitField
 from wtforms.validators import InputRequired
 from wtforms.validators import ValidationError
 
@@ -39,6 +40,9 @@ class EditorForm(FlaskForm):
     body = TextAreaField('', [InputRequired()])
     tags = StringField('')
 
+class CommentForm(FlaskForm):
+    comment = StringField('Comment: ', [InputRequired()])
+    submit_comment = SubmitField('Submit Comment')
 
 class LoginForm(FlaskForm):
     name = StringField('', [InputRequired()])
