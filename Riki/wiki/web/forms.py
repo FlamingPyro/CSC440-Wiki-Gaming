@@ -7,6 +7,7 @@ from wtforms import BooleanField
 from wtforms import StringField
 from wtforms import TextAreaField
 from wtforms import PasswordField
+from wtforms.fields.choices import SelectField
 from wtforms.fields.simple import SubmitField
 from wtforms.validators import InputRequired
 from wtforms.validators import ValidationError
@@ -62,8 +63,18 @@ class ShoppingInfoForm(FlaskForm):
     address = StringField('Address: ', [InputRequired()])
     city = StringField('City:', [InputRequired()])
     state = StringField('State: ', [InputRequired()])
+    country = SelectField('Country:', choices=[('US', 'United States'), ('CA', 'Canada'), ('UK', 'United Kingdom')],
+                          validators=[InputRequired()])
     zipcode = StringField('ZIP: ', [InputRequired()])
     email = StringField('Email: ', [InputRequired()])
     phone_number = StringField('Phone#: ', [InputRequired()])
 
     proceed_to_checkout = SubmitField('Proceed to Checkout')
+
+class PurchasingForm(FlaskForm):
+    credit_card_number = StringField('Credit Card:', [InputRequired()])
+    card_holder = StringField('Card holder:', [InputRequired()])
+    card_expiration_date = StringField('Card expiration M/Y:', [InputRequired()])
+    card_cvv = StringField('Card cvv:', [InputRequired()])
+
+    checkout = SubmitField('Checkout')
