@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS shopping_info (
     address TEXT NOT NULL,
     city TEXT NOT NULL,
     state TEXT NOT NULL,
+    country TEXT NOT NULL,
     zipcode TEXT NOT NULL,
     email TEXT NOT NULL,
     phone_number TEXT NOT NULL
