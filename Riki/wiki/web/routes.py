@@ -19,9 +19,11 @@ from wiki.web.forms import LoginForm
 from wiki.web.forms import SearchForm
 from wiki.web.forms import URLForm
 from wiki.web.forms import ShoppingInfoForm
+from wiki.web.forms import PurchasingForm
 from wiki.web import current_wiki
 from wiki.web import current_users
 from wiki.web.user import protect
+
 from .models import ShoppingInfo
 from .extensions import db
 
@@ -84,6 +86,7 @@ def shopping_cart():
             address=form.address.data,
             city=form.city.data,
             state=form.state.data,
+            country=form.country.data,
             zipcode=form.zipcode.data,
             email=form.email.data,
             phone_number=form.phone_number.data
@@ -91,8 +94,16 @@ def shopping_cart():
         db.session.add(new_info)
         db.session.commit()
 
-        return redirect(url_for('wiki.success_page'))
+        return redirect(url_for('wiki.purchasing'))
     return render_template('shopping_cart.html', form=form)
+
+@bp.route('/purchasing/', methods=['GET', 'POST'])
+@protect
+def purchasing():
+    form = PurchasingForm()
+    if form.validate_on_submit():
+        return redirect(url_for('wiki.success_page'))
+    return render_template('purchasing_form.html', form=form)
 
 @bp.route('/success_page', methods=['GET', 'POST'])
 @protect
