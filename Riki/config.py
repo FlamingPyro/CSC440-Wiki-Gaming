@@ -5,6 +5,6 @@ TITLE='Riki'
 HISTORY_SHOW_MAX=30
 PIC_BASE = '/static/content/'
 CONTENT_DIR = 'C:/Users/ethan/PycharmProjects/CSC440-Wiki-Gaming/Riki/content'
-USER_DIR = 'C:/Users/ethan/PycharmProjects/CSC440-Wiki-Gaming/Riki/wiki/web/user.py'
+USER_DIR = 'C:/Users/ethan/PycharmProjects/CSC440-Wiki-Gaming/Riki/user'
 NUMBER_OF_HISTORY = 5
 PRIVATE = True

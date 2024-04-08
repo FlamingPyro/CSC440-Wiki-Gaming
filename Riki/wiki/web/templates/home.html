@@ -1,9 +1,12 @@
 {% extends "base.html" %}
 {% block title %}
-	Welcome to your new wiki!
+	Wiki Gaming
 {% endblock title %}
 
 {% block content %}
-<p>You did not create any content yet. Your wiki recommends you, to do so now, as every user will see this page first, and you would want to make a good impression, wouldn't you?</p>
-<p><a href="{{ url_for('wiki.edit', url='home') }}" class="btn btn-success">Create a homepage</a></p>
+    {% for games in value %}
+        <p>{{ games.name }}</p>
+        <img src="static/images/{{ games.icon }}" class="image" />
+    {% endfor %}
+    <p><a href="{{ url_for('wiki.edit', url='home') }}" class="btn btn-success">Create a homepage</a></p>
 {% endblock %}

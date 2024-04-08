@@ -22,6 +22,9 @@ from wiki.web import current_wiki
 from wiki.web import current_users
 from wiki.web.user import protect
 
+from .models import HomeDatabase
+from .extensions import db
+
 
 bp = Blueprint('wiki', __name__)
 
@@ -31,8 +34,9 @@ bp = Blueprint('wiki', __name__)
 def home():
     page = current_wiki.get('home')
     if page:
-        return display('home')
-    return render_template('home.html')
+        data = HomeDatabase.query.all()
+        return render_template('home.html', value=data)
+    return display('home')
 
 
 @bp.route('/index/')
