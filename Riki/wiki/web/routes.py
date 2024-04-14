@@ -8,6 +8,7 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import url_for
+from flask import session
 from flask_login import current_user
 from flask_login import login_required
 from flask_login import login_user
@@ -20,6 +21,7 @@ from wiki.web.forms import SearchForm
 from wiki.web.forms import URLForm
 from wiki.web.forms import ShoppingInfoForm
 from wiki.web.forms import PurchasingForm
+from wiki.web.forms import AddToCartForm
 from wiki.web import current_wiki
 from wiki.web import current_users
 from wiki.web.user import protect
@@ -29,15 +31,26 @@ from .extensions import db
 
 bp = Blueprint('wiki', __name__)
 
-@bp.route('/')
+@bp.route('/', methods=['GET', 'POST'])
 @protect
 def home():
-    page = current_wiki.get('home')
-    if page:
-        return display('home')
-    return render_template('home.html')
+    form = AddToCartForm()
+    if form.validate_on_submit():
+        game_info = {
+            'id': 1, 'name': 'Helldivers', 'price': 19.99
+        }
+        session['cart'] = game_info
+        flash('Game added to cart!', 'success')
+        return redirect(url_for('wiki.shopping_cart'))
+    return render_template('home.html', form=form)
 
-
+@bp.route('/remove_from_cart', methods=['POST'])
+@protect
+def remove_from_cart():
+    session.pop('cart', None)
+    flash('Item removed from cart!', 'success')
+    return redirect(url_for('wiki.shopping_cart'))
+    
 @bp.route('/index/')
 @protect
 def index():
@@ -95,7 +108,9 @@ def shopping_cart():
         db.session.commit()
 
         return redirect(url_for('wiki.purchasing'))
-    return render_template('shopping_cart.html', form=form)
+
+    game_info = session.get('cart')
+    return render_template('shopping_cart.html', form=form, game_info=game_info)
 
 @bp.route('/purchasing/', methods=['GET', 'POST'])
 @protect
