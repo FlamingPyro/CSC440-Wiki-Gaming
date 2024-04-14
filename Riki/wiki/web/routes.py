@@ -8,13 +8,16 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import url_for
+from flask import Flask
 from flask_login import current_user
 from flask_login import login_required
 from flask_login import login_user
 from flask_login import logout_user
 
+import logging
 from wiki.core import Processor
 from wiki.web.forms import EditorForm
+from wiki.web.forms import LikeForm
 from wiki.web.forms import LoginForm
 from wiki.web.forms import SearchForm
 from wiki.web.forms import URLForm
@@ -22,6 +25,10 @@ from wiki.web.forms import CommentForm
 from wiki.web import current_wiki
 from wiki.web import current_users
 from wiki.web.user import protect
+
+from .models import Comments
+from .extensions import db
+from .helper import increment_likes
 
 
 
@@ -33,8 +40,8 @@ bp = Blueprint('wiki', __name__)
 def home():
     page = current_wiki.get('home')
     if page:
-        return display('home')
-    return render_template('home.html')
+        return render_template('home.html', page=page)
+    return display('home')
 
 
 @bp.route('/index/')
@@ -150,16 +157,32 @@ def user_logout():
     flash('Logout successful.', 'success')
     return redirect(url_for('wiki.index'))
 
-@bp.route('/comments/', methods=('GET', 'POST'))
+@bp.route('/testpage.html/', methods=('GET', 'POST'))
 @protect
-def comments():
+def testpage():
     form = CommentForm()
-    page = {'title': 'Comments Page'}
-    if "like" in request.form:
-        return render_template('404.html', page=page, form=form)
-    if "dislike" in request.form:
-        return render_template('404.html')
-    return render_template('comments.html', page=page, form=form)
+    likeform = LikeForm()
+    column_data = Comments.query.with_entities(Comments.comments, Comments.username).all()
+    num_likes = Comments.query.order_by(Comments.id).first().numLikes
+    page_name = "testpage"
+    return render_page('Testpage', form, likeform, column_data, num_likes, page_name)
+
+def render_page(page_title, form, likeform, column_data, num_likes, page_name):
+    if form.validate_on_submit():
+        new_info = Comments(
+            comments=form.comment.data,
+            username=current_user.name
+        )
+        db.session.add(new_info)
+        db.session.commit()
+        form = CommentForm()
+        return redirect(url_for('wiki.' + page_name))
+    elif likeform.validate_on_submit():
+        comment = Comments.query.order_by(Comments.id).first()
+        if comment:
+            increment_likes(comment.id)
+        return redirect(url_for('wiki.' + page_name + ''))
+    return render_template(page_name + '.html', page={'title': page_title}, form=form, column_data=column_data, numLikes=num_likes, likeform=likeform)
 
 @bp.route('/user/')
 def user_index():
