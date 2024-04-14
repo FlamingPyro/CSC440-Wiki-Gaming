@@ -78,3 +78,7 @@ class PurchasingForm(FlaskForm):
     card_cvv = StringField('Card cvv:', [InputRequired()])
 
     checkout = SubmitField('Checkout')
+
+class AddToCartForm(FlaskForm):
+    add_to_cart = SubmitField('Add to Cart')
+    
