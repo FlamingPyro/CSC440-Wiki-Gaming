@@ -5,8 +5,14 @@
 
 {% block content %}
     {% for games in value %}
-        <p>{{ games.name }}</p>
-        <img src="static/images/{{ games.icon }}" class="image" />
+        <p><b>{{ games.name }}</b></p>
+        <p>
+            <a href="{{ url_for('wiki.display', url=games.name.lower().replace(" ", "_")) }}"
+               class="btn-without-border">
+                <img src="/static/images/{{ games.icon }}"
+                    width="200px"
+                    height="200px">
+            </a>
+        </p>
     {% endfor %}
-    <p><a href="{{ url_for('wiki.edit', url='home') }}" class="btn btn-success">Create a homepage</a></p>
 {% endblock %}
