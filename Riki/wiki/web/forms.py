@@ -68,3 +68,6 @@ class CreateForm(FlaskForm):
 
     def validate_password(form, field):
         pass  # todo
+
+class UserForm(FlaskForm):
+    pass

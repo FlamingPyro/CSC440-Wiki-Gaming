@@ -151,9 +151,25 @@ def user_logout():
     return redirect(url_for('wiki.index'))
 
 
-@bp.route('/user/')
-def user_index():
-    pass
+@bp.route('/user/page', methods=['GET'])
+def user_page():
+    page = current_wiki.get('home')
+    if page:
+        return display('home')
+    return render_template('home.html')
+
+@bp.route('/edit/user/<int:user_id>/', methods=['GET', 'POST'])
+def create_user_page(url):
+    page = current_wiki.get(url)
+    form = EditorForm(obj=page)
+    if form.validate_on_submit():
+        if not page:
+            page = current_wiki.get_bare(url)
+        form.populate_obj(page)
+        page.save()
+        flash('"%s" was saved.' % page.title, 'success')
+        return redirect(url_for('wiki.display', url=url))
+    return render_template('editor.html', form=form, page=page)
 
 
 @bp.route('/user/create/', methods=['GET', 'POST'])
@@ -166,13 +182,8 @@ def user_create():
         login_user(user)
         user.set('authenticated', True)
         flash('Account Creation successful.', 'success')
-        return redirect(request.args.get("next") or url_for('wiki.index'))
+        return redirect(request.args.get("next") or url_for('wiki.edit', url=('user/<int:user_id>/')))
     return render_template('account.html', form=form)
-
-
-@bp.route('/user/<int:user_id>/')
-def user_admin(user_id):
-    pass
 
 
 @bp.route('/user/delete/<int:user_id>/')

@@ -1,7 +1,4 @@
-title: Main
-tags: interesting
+title: main
+tags: 
 
-World
-[[hello|abc]] [[world|world]]
-
-aaa
+e
