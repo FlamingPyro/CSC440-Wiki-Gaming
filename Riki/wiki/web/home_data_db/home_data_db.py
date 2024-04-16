@@ -6,7 +6,8 @@ create_table_query = '''
     CREATE TABLE IF NOT EXISTS home_data (
         id INTEGER PRIMARY KEY,
         name TEXT NOT NULL,
-        icon TEXT NOT NULL
+        icon TEXT NOT NULL,
+        price FLOAT NOT NULL
     )
 '''
 

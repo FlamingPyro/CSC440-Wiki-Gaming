@@ -2,7 +2,7 @@
     Routes
     ~~~~~~
 """
-from flask import Blueprint
+from flask import Blueprint, session
 from flask import flash
 from flask import redirect
 from flask import render_template
@@ -22,6 +22,7 @@ from wiki.web import current_wiki
 from wiki.web import current_users
 from wiki.web.user import protect
 
+from .forms import AddToCartForm, ShoppingInfoForm
 from .models import HomeDatabase
 from .extensions import db
 
@@ -33,9 +34,13 @@ bp = Blueprint('wiki', __name__)
 @protect
 def home():
     page = current_wiki.get('home')
+    form = AddToCartForm(request.form)
+    if form.validate_on_submit():
+        session['cart'] = form.price
     if page:
-        data = HomeDatabase.query.all()
-        return render_template('home.html', value=data)
+        data1 = HomeDatabase.query.limit(4).all()
+        data2 = HomeDatabase.query.offset(4).all()
+        return render_template('home.html', games1=data1, games2=data2, form=form)
     return display('home')
 
 

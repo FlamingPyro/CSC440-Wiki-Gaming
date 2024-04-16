@@ -3,7 +3,7 @@
     ~~~~~
 """
 from flask_wtf import FlaskForm
-from wtforms import BooleanField
+from wtforms import BooleanField, SubmitField, SelectField
 from wtforms import StringField
 from wtforms import TextAreaField
 from wtforms import PasswordField
@@ -55,3 +55,22 @@ class LoginForm(FlaskForm):
             return
         if not user.check_password(field.data):
             raise ValidationError('Username and password do not match.')
+
+
+class ShoppingInfoForm(FlaskForm):
+    name = StringField('Name: ', [InputRequired()])
+    address = StringField('Address: ', [InputRequired()])
+    city = StringField('City:', [InputRequired()])
+    state = StringField('State: ', [InputRequired()])
+    country = SelectField('Country:', choices=[('US', 'United States'), ('CA', 'Canada'), ('UK', 'United Kingdom')],
+                          validators=[InputRequired()])
+    zipcode = StringField('ZIP: ', [InputRequired()])
+    email = StringField('Email: ', [InputRequired()])
+    phone_number = StringField('Phone#: ', [InputRequired()])
+
+    proceed_to_checkout = SubmitField('Proceed to Checkout')
+
+
+class AddToCartForm(FlaskForm):
+    price = StringField('Price: ', [InputRequired()])
+    add_to_cart = SubmitField('Add to Cart')

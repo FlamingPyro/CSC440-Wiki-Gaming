@@ -4,15 +4,65 @@
 {% endblock title %}
 
 {% block content %}
-    {% for games in value %}
-        <p><b>{{ games.name }}</b></p>
-        <p>
-            <a href="{{ url_for('wiki.display', url=games.name.lower().replace(" ", "_")) }}"
+    <table>
+    <tr>
+        {% for games in games1 %}
+            <td style="text-align: center">{{ games.name }}</td>
+        {%  endfor %}
+    </tr>
+    <tr>
+        {% for games in games1 %}
+            <td>
+                <a href="{{ url_for('wiki.display', url=games.name.lower().replace(" ", "_")) }}"
                class="btn-without-border">
                 <img src="/static/images/{{ games.icon }}"
                     width="200px"
                     height="200px">
-            </a>
-        </p>
-    {% endfor %}
+                </a>
+            </td>
+        {% endfor %}
+    </tr>
+    <tr>
+        {% for games in games1 %}
+            <td>
+                <center>
+                <a class="btn">
+                    {{ form.hidden_tag() }}
+                    {{ form.add_to_cart(class="btn btn-primary") }}
+                    {{  games.price }}
+                </a>
+                </center>
+            </td>
+        {% endfor %}
+    </tr>
+    </table>
+    <hr class="solid">
+    <table>
+    <tr>
+        {% for games in games2 %}
+            <td style="text-align: center">{{ games.name }}</td>
+        {%  endfor %}
+    </tr>
+    <tr>
+        {% for games in games2 %}
+            <td>
+                <a href="{{ url_for('wiki.display', url=games.name.lower().replace(" ", "_")) }}"
+               class="btn-without-border">
+                <img src="/static/images/{{ games.icon }}"
+                    width="200px"
+                    height="200px">
+                </a>
+            </td>
+        {% endfor %}
+    </tr>
+    <tr>
+        {% for games in games2 %}
+            <td>
+                <center>
+                <a class="btn">Add to Cart</a>
+                </center>
+            </td>
+        {% endfor %}
+    </tr>
+    </table>
 {% endblock %}
