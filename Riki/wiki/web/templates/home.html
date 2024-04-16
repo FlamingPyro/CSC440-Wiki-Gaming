@@ -1,14 +1,24 @@
 {% extends "base.html" %}
 {% block title %}
-	Wiki Gaming
+    Wiki Gaming
 {% endblock title %}
 
 {% block content %}
-    <form method="POST" action="{{ url_for('wiki.home') }}">
-        <div>
-            <img src="{{ url_for('static', filename='images/helldivers.png') }}" class="image" />
-            {{ form.hidden_tag() }}
-            {{ form.add_to_cart(class="btn btn-primary") }}
+    <div>
+        <h2>Featured Games</h2>
+        <div style="display: flex; flex-wrap: wrap;">
+            {% for game in home_data %}
+            <div style="flex: 1; margin: 10px; border: 1px solid #ccc; padding: 10px;">
+                <h3>{{ game.name }}</h3>
+                <img src="{{ url_for('static', filename='images/' + game.icon) }}" alt="{{ game.name }}" width="200px" height="200px">
+                <p>Price: ${{ game.price }}</p>
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    {{ form.add_to_cart(class="btn btn-primary") }}
+                    <input type="hidden" name="game_id" value="{{ game.id }}">
+                </form>
+            </div>
+            {% endfor %}
         </div>
-    </form>
+    </div>
 {% endblock %}
