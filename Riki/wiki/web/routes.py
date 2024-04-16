@@ -28,6 +28,7 @@ from wiki.web.user import protect
 
 from .models import ShoppingInfo
 from .extensions import db
+from .models import HomeDatabase
 
 bp = Blueprint('wiki', __name__)
 
@@ -36,13 +37,16 @@ bp = Blueprint('wiki', __name__)
 def home():
     form = AddToCartForm()
     if form.validate_on_submit():
-        game_info = {
-            'id': 1, 'name': 'Helldivers', 'price': 19.99
-        }
-        session['cart'] = game_info
-        flash('Game added to cart!', 'success')
-        return redirect(url_for('wiki.shopping_cart'))
-    return render_template('home.html', form=form)
+        game_id = request.form.get('game_id')
+        game = HomeDatabase.query.get(game_id)
+        if game:
+            game_info = {'id': game.id, 'name': game.name, 'price': game.price}
+            session.setdefault('cart', []).append(game_info)
+            flash('Game added to cart!', 'success')
+            return redirect(url_for('wiki.shopping_cart'))
+
+    home_data = HomeDatabase.query.all()
+    return render_template('home.html', form=form, home_data=home_data)
 
 @bp.route('/remove_from_cart', methods=['POST'])
 @protect
