@@ -48,15 +48,17 @@
             <div class="visual-box">
                 {% if game_info %}
                     <ul>
-                        <li style="list-style: none;">
-                            <div style="display: flex; align-items: center;">
-                                <p style="margin-right: 10px;">{{ game_info.name }} - Price: ${{ game_info.price }}</p>
-                                <form method="POST" action="{{ url_for('wiki.remove_from_cart') }}">
-                                    <input type="hidden" name="game_id" value="{{ game_info.id }}">
-                                    <button type="submit" class="btn btn-danger" name="remove_{{ game_info.id }}">Remove</button>
-                                </form>
-                            </div>
-                        </li>
+                        {% for item in game_info %}
+                            <li style="list-style: none;">
+                                <div style="display: flex; align-items: center;">
+                                    <p style="margin-right: 10px;">{{ item.name }} - Price: ${{ item.price }}</p>
+                                    <form method="POST" action="{{ url_for('wiki.remove_from_cart') }}">
+                                        <input type="hidden" name="game_id" value="{{ item.id }}">
+                                        <button type="submit" class="btn btn-danger" name="remove_{{ item.id }}">Remove</button>
+                                    </form>
+                                </div>
+                            </li>
+                        {% endfor %}
                     </ul>
                 {% else %}
                     <p>No items in cart</p>
