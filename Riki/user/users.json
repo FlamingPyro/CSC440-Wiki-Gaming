@@ -94,5 +94,21 @@
     "authentication_method": "cleartext",
     "authenticated": false,
     "password": "pear1"
+  },
+  "coolfish": {
+    "user_id": 13,
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "authenticated": false,
+    "password": "clown"
+  },
+  "pear43": {
+    "user_id": 14,
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "authenticated": true,
+    "password": "43pearsnoway"
   }
 }

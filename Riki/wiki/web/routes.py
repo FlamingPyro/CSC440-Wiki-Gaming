@@ -40,7 +40,11 @@ def home():
 @protect
 def index():
     pages = current_wiki.index()
-    return render_template('index.html', pages=pages)
+    index_pages = list()
+    for page in pages:
+        if 'user' not in page.url:
+            index_pages.append(page)
+    return render_template('index.html', pages=index_pages)
 
 
 @bp.route('/<path:url>/')
@@ -155,20 +159,11 @@ def user_logout():
 def user_page():
     user_id = current_user.get_id()
     page = current_wiki.get(f'user/{user_id}')
-    return render_template('page.html', page=page)
-
-@bp.route('/edit/user/<int:user_id>/', methods=['GET', 'POST'])
-def create_user_page(url):
-    page = current_wiki.get(url)
-    form = EditorForm(obj=page)
-    if form.validate_on_submit():
-        if not page:
-            page = current_wiki.get_bare(url)
-        form.populate_obj(page)
-        page.save()
-        flash('"%s" was saved.' % page.title, 'success')
-        return redirect(url_for('wiki.display', url=url))
-    return render_template('editor.html', form=form, page=page)
+    if page:
+        return render_template('page.html', page=page)
+    else:
+        flash('This user does not have a page. Create one now:')
+        return redirect(request.args.get("next") or url_for('wiki.edit', url=(f'user/{user_id}/')))
 
 
 @bp.route('/user/create/', methods=['GET', 'POST'])
