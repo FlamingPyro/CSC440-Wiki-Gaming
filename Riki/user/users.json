@@ -78,5 +78,21 @@
     "authentication_method": "cleartext",
     "authenticated": true,
     "password": "1"
+  },
+  "pear": {
+    "user_id": 11,
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "authenticated": false,
+    "password": "1"
+  },
+  "pear2": {
+    "user_id": 12,
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "authenticated": false,
+    "password": "pear1"
   }
 }

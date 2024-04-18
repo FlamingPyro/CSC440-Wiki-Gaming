@@ -151,12 +151,11 @@ def user_logout():
     return redirect(url_for('wiki.index'))
 
 
-@bp.route('/user/page', methods=['GET'])
+@bp.route('/user/page/', methods=['GET'])
 def user_page():
-    page = current_wiki.get('home')
-    if page:
-        return display('home')
-    return render_template('home.html')
+    user_id = current_user.get_id()
+    page = current_wiki.get(f'user/{user_id}')
+    return render_template('page.html', page=page)
 
 @bp.route('/edit/user/<int:user_id>/', methods=['GET', 'POST'])
 def create_user_page(url):
@@ -181,8 +180,9 @@ def user_create():
         user = (current_users.add_user(name=username, password=password, authentication_method='cleartext'))
         login_user(user)
         user.set('authenticated', True)
+        user_id = user.get_id()
         flash('Account Creation successful.', 'success')
-        return redirect(request.args.get("next") or url_for('wiki.edit', url=('user/<int:user_id>/')))
+        return redirect(request.args.get("next") or url_for('wiki.edit', url=(f'user/{user_id}/')))
     return render_template('account.html', form=form)
 
 
