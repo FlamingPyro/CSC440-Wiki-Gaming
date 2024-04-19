@@ -1,16 +1,114 @@
 {
   "name": {
+    "user_id": 1,
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "1234",
+    "authenticated": false,
+    "roles": []
+  },
+  "sam": {
+    "user_id": 2,
     "active": true,
     "authentication_method": "cleartext",
     "password": "1234",
     "authenticated": true,
     "roles": []
   },
-  "sam": {
+  "evie": {
+    "user_id": 3,
     "active": true,
     "authentication_method": "cleartext",
-    "password": "1234",
+    "password": "test",
     "authenticated": true,
     "roles": []
+  },
+  "name2": {
+    "user_id": 4,
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "authenticated": true,
+    "password": "1234"
+  },
+  "potato": {
+    "user_id": 5,
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "authenticated": true,
+    "password": "yipppee"
+  },
+  "evie2": {
+    "user_id": 6,
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "authenticated": true,
+    "password": "1234"
+  },
+  "1234": {
+    "user_id": 7,
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "authenticated": false,
+    "password": "1"
+  },
+  "1": {
+    "user_id": 8,
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "authenticated": false,
+    "password": "1"
+  },
+  "test12": {
+    "user_id": 9,
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "authenticated": true,
+    "password": "1"
+  },
+  "5125": {
+    "user_id": 10,
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "authenticated": true,
+    "password": "1"
+  },
+  "pear": {
+    "user_id": 11,
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "authenticated": false,
+    "password": "1"
+  },
+  "pear2": {
+    "user_id": 12,
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "authenticated": false,
+    "password": "pear1"
+  },
+  "coolfish": {
+    "user_id": 13,
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "authenticated": false,
+    "password": "clown"
+  },
+  "pear43": {
+    "user_id": 14,
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "authenticated": true,
+    "password": "43pearsnoway"
   }
 }

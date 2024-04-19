@@ -29,16 +29,16 @@
 </head>
 
 
-    <img src="https://i.pinimg.com/736x/8c/e7/ea/8ce7eac2a6a23602b0dbd8363e222f32.jpg" alt="Your Image" class="img-fluid">
+    <img src="https://image.api.playstation.com/vulcan/ap/rnd/202107/3100/HO8vkO9pfXhwbHi5WHECQJdN.png" alt="HorizonForbiddenWest" class="img-fluid">
 
-    <form method="post" action="{{ url_for('wiki.testpage') }}">
+    <form method="post" action="{{ url_for('wiki.horizonforbiddenwest') }}">
         <!-- Like Form -->
         {{ likeform.hidden_tag() }}
         {{ likeform.submit_like(class="btn btn-primary") }}
         Likes: {{numLikes}}
     </form>
 
-    <form method="post" action="{{ url_for('wiki.testpage') }}">
+    <form method="post" action="{{ url_for('wiki.horizonforbiddenwest') }}">
     {{ form.hidden_tag() }}
     <!-- Main Comment Form -->
     <div class="form-group">

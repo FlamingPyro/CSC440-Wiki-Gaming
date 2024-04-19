@@ -1,0 +1,37 @@
+{% extends "shopping_cart.html" %}
+{% block title %}Purchasing Information{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="flex-container">
+        <div class="personal-info">
+            <form method="POST" action="{{ url_for('wiki.purchasing') }}">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.credit_card_number.label }}
+                    {{ form.credit_card_number(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.card_holder.label }}
+                    {{ form.card_holder(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.card_expiration_date.label }}
+                    {{ form.card_expiration_date(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.card_cvv.label }}
+                    {{ form.card_cvv(class="form-control") }}
+                </div>
+                {{ form.checkout(class="btn btn-primary") }}
+            </form>
+        </div>
+        <div class="items">
+            <h3>Items</h3>
+            <div class="visual-box">
+                <!-- content of this box -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

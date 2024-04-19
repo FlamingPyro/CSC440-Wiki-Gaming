@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Cart{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="flex-container">
+        <div class="personal-info">
+            <h3>Personal Information</h3>
+            <form method="POST" action="{{ url_for('wiki.shopping_cart') }}">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.name.label }}
+                    {{ form.name(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.address.label }}
+                    {{ form.address(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.city.label }}
+                    {{ form.city(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.state.label }}
+                    {{ form.state(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.country.label }}
+                    {{ form.country(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.zipcode.label }}
+                    {{ form.zipcode(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.email.label }}
+                    {{ form.email(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.phone_number.label }}
+                    {{ form.phone_number(class="form-control") }}
+                </div>
+                {{ form.proceed_to_checkout(class="btn btn-primary") }}
+            </form>
+        </div>
+        <div class="items">
+            <h2>Items</h2>
+            <div class="visual-box">
+                {% if game_info %}
+                    <ul>
+                        {% for item in game_info %}
+                            <li style="list-style: none;">
+                                <div style="display: flex; align-items: center;">
+                                    <p style="margin-right: 10px;">{{ item.name }} - Price: ${{ item.price }}</p>
+                                    <form method="POST" action="{{ url_for('wiki.remove_from_cart') }}">
+                                        <input type="hidden" name="game_id" value="{{ item.id }}">
+                                        <button type="submit" class="btn btn-danger" name="remove_{{ item.id }}">Remove</button>
+                                    </form>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No items in cart</p>
+                {% endif %}
+            </div>
+            <h3>Total: ${{ total_price|round(2) }}</h3>
+        </div>
+    </div>
+</div>
+{% endblock %}

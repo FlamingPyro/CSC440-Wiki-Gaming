@@ -5,6 +5,7 @@
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.css') }}">
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='responsive.css') }}">
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='pygments.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 	</head>
 
 	<body>
@@ -26,11 +27,16 @@
 							</ul>
 
 							<ul class="nav pull-right">
-								{% if current_user.is_anonymous %}
-									<li><a href="{{ url_for('wiki.user_login') }}">Login</a></li>
+								<li class="divider-vertical"></li>
+								<li><a href="{{ url_for('wiki.shopping_cart') }}"><b>Cart</b></a></li>
+								<li class="divider-vertical"></li>
+								{% if current_user.is_authenticated %}
+                                    <li><a href="{{ url_for('wiki.user_page') }}">User Page</a></li>
+                                    <li><a href="{{ url_for('wiki.user_logout') }}">Logout</a></li>
 								{% else %}
-									<li><a href="{{ url_for('wiki.user_logout') }}">Logout</a></li>
-								{% endif %}
+                                    <li><a href="{{ url_for('wiki.user_login') }}">Login</a></li>
+                                    <li><a href="{{ url_for('wiki.user_create') }}">Create Account</a></li>
+                                {% endif %}
 							</ul>
 						</div>
 					</div>

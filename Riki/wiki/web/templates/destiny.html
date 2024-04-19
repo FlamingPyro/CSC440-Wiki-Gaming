@@ -28,26 +28,24 @@
     </style>
 </head>
 
+    <img src="/static/images/destiny2.png" alt="Destiny 2" class="img-fluid">
 
-    <img src="https://i.pinimg.com/736x/8c/e7/ea/8ce7eac2a6a23602b0dbd8363e222f32.jpg" alt="Your Image" class="img-fluid">
+    <form method="post" action="{{ url_for('wiki.destiny') }}">
 
-    <form method="post" action="{{ url_for('wiki.testpage') }}">
-        <!-- Like Form -->
         {{ likeform.hidden_tag() }}
         {{ likeform.submit_like(class="btn btn-primary") }}
         Likes: {{numLikes}}
     </form>
 
-    <form method="post" action="{{ url_for('wiki.testpage') }}">
+    <form method="post" action="{{ url_for('wiki.destiny') }}">
     {{ form.hidden_tag() }}
-    <!-- Main Comment Form -->
+
     <div class="form-group">
         {{ form.comment.label }}
         {{ form.comment(class="form-control") }}
     </div>
     {{ form.submit_comment(class="btn btn-primary") }}
     </form>
-
 
 <body>
     <div class="comments-section">
