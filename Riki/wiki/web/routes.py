@@ -51,7 +51,10 @@ def home():
 @bp.route('/remove_from_cart', methods=['POST'])
 @protect
 def remove_from_cart():
-    session.pop('cart', None)
+    game_id = request.form.get('game_id')
+    if 'cart' in session:
+        updated_cart = [item for item in session['cart'] if item['id'] != int(game_id)]
+        session['cart'] = updated_cart
     flash('Item removed from cart!', 'success')
     return redirect(url_for('wiki.shopping_cart'))
     
@@ -97,7 +100,8 @@ def edit(url):
 @protect
 def shopping_cart():
     form = ShoppingInfoForm()
-        if form.validate_on_submit():
+    total_price = 0
+    if form.validate_on_submit():
         new_info = ShoppingInfo(
             name=form.name.data,
             address=form.address.data,
@@ -114,13 +118,20 @@ def shopping_cart():
         return redirect(url_for('wiki.purchasing'))
 
     game_info = session.get('cart')
-    return render_template('shopping_cart.html', form=form, game_info=game_info)
+    if game_info:
+        for item in game_info:
+            total_price += item['price']
+
+    return render_template('shopping_cart.html', form=form,
+                           game_info=game_info, total_price=total_price)
 
 @bp.route('/purchasing/', methods=['GET', 'POST'])
 @protect
 def purchasing():
     form = PurchasingForm()
     if form.validate_on_submit():
+        if 'cart' in session:
+            session.pop('cart')
         return redirect(url_for('wiki.success_page'))
     return render_template('purchasing_form.html', form=form)
 
