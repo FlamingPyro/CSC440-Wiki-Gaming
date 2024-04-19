@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comments Section</title>
+    <style>
+        .comments-section {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .comments-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .comment-item {
+            margin-bottom: 15px;
+        }
+        .username {
+            font-weight: bold;
+        }
+        .comment {
+            margin-left: 5px;
+        }
+    </style>
+</head>
+
+
+    <img src="/static/images/eldenring.png" alt="EldenRing" class="img-fluid">
+
+    <form method="post" action="{{ url_for('wiki.eldenring') }}">
+        <!-- Like Form -->
+        {{ likeform.hidden_tag() }}
+        {{ likeform.submit_like(class="btn btn-primary") }}
+        Likes: {{numLikes}}
+    </form>
+
+    <form method="post" action="{{ url_for('wiki.eldenring') }}">
+    {{ form.hidden_tag() }}
+    <!-- Main Comment Form -->
+    <div class="form-group">
+        {{ form.comment.label }}
+        {{ form.comment(class="form-control") }}
+    </div>
+    {{ form.submit_comment(class="btn btn-primary") }}
+    </form>
+
+
+<body>
+    <div class="comments-section">
+        <h1>Comments</h1>
+        <ul class="comments-list">
+            {% for item in column_data %}
+                <li class="comment-item">
+                    <span class="username">{{ item.username }}</span>: <span class="comment">{{ item.comments }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+
+{% for field, errors in form.errors.items() %}
+        <ul>
+            {% for error in errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+{% endblock %}
+

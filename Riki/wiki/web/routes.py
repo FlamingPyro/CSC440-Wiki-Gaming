@@ -8,38 +8,67 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import url_for
+from flask import Flask
+from flask import session
 from flask_login import current_user
 from flask_login import login_required
 from flask_login import login_user
 from flask_login import logout_user
 
+
+
+import logging
 from wiki.core import Processor
 from wiki.web.forms import EditorForm
+from wiki.web.forms import LikeForm
 from wiki.web.forms import LoginForm
 from wiki.web.forms import SearchForm
 from wiki.web.forms import URLForm
+from wiki.web.forms import CommentForm
+from wiki.web.forms import AddToCartForm
+from wiki.web.forms import ShoppingInfoForm
+from wiki.web.forms import PurchasingForm
+from wiki.web.forms import CreateForm
 from wiki.web import current_wiki
 from wiki.web import current_users
 from wiki.web.user import protect
+
+from .models import ShoppingInfo, HomeDatabase, Helldivers, Tekken, LethalCompany, Minecraft, Destiny, Palworld, EldenRing, HorizonForbiddenWest
+
+from .extensions import db
+from .helper import increment_likes
+
 
 
 bp = Blueprint('wiki', __name__)
 
 
-@bp.route('/')
+@bp.route('/', methods=['GET', 'POST'])
 @protect
 def home():
-    page = current_wiki.get('home')
-    if page:
-        return display('home')
-    return render_template('home.html')
+    form = AddToCartForm()
+    if form.validate_on_submit():
+        game_id = request.form.get('game_id')
+        game = HomeDatabase.query.get(game_id)
+        if game:
+            game_info = {'id': game.id, 'name': game.name, 'price': game.price}
+            session.setdefault('cart', []).append(game_info)
+            flash('Game added to cart!', 'success')
+            return redirect(url_for('wiki.shopping_cart'))
+
+    home_data = HomeDatabase.query.all()
+    return render_template('home.html', form=form, home_data=home_data)
 
 
 @bp.route('/index/')
 @protect
 def index():
     pages = current_wiki.index()
-    return render_template('index.html', pages=pages)
+    index_pages = list()
+    for page in pages:
+        if 'user' not in page.url:
+            index_pages.append(page)
+    return render_template('index.html', pages=index_pages)
 
 
 @bp.route('/<path:url>/')
@@ -81,7 +110,6 @@ def preview():
     processor = Processor(request.form['body'])
     data['html'], data['body'], data['meta'] = processor.process()
     return data['html']
-
 
 @bp.route('/move/<path:url>/', methods=['GET', 'POST'])
 @protect
@@ -129,6 +157,158 @@ def search():
     return render_template('search.html', form=form, search=None)
 
 
+@bp.route('/Tekken/', methods=('GET', 'POST'))
+@protect
+def tekken():
+    db_model = Tekken
+    page_name = "tekken"
+    return render_page('Tekken', page_name, db_model)
+
+@bp.route('/Destiny/', methods=('GET', 'POST'))
+@protect
+def destiny():
+    db_model = Destiny
+    page_name = "destiny"
+    return render_page('Destiny 2', page_name, db_model)
+
+@bp.route('/Elden/', methods=('GET', 'POST'))
+@protect
+def eldenring():
+    db_model = EldenRing
+    page_name = "eldenring"
+    return render_page('Elden Ring', page_name, db_model)
+
+@bp.route('/Horizon/', methods=('GET', 'POST'))
+@protect
+def horizonforbiddenwest():
+    db_model = HorizonForbiddenWest
+    page_name = "horizonforbiddenwest"
+    return render_page('Horizon Forbidden West', page_name, db_model)
+
+
+@bp.route('/Lethal/', methods=('GET', 'POST'))
+@protect
+def lethalcompany():
+    db_model = LethalCompany
+    page_name = "lethalcompany"
+    return render_page('Lethal Company', page_name, db_model)
+
+
+@bp.route('/Minecraft/', methods=('GET', 'POST'))
+@protect
+def minecraft():
+    db_model = Minecraft
+    page_name = "minecraft"
+    return render_page('Minecraft', page_name, db_model)
+
+
+@bp.route('/Palworld/', methods=('GET', 'POST'))
+@protect
+def palworld():
+    db_model = Palworld
+    page_name = "palworld"
+    return render_page('Palworld', page_name, db_model)
+
+
+@bp.route('/Helldivers/', methods=('GET', 'POST'))
+@protect
+def helldivers():
+    db_model = Helldivers
+    page_name = "helldivers"
+    return render_page('Helldivers', page_name, db_model)
+
+
+#REMOVE BEFORE SUBMITTING
+@bp.route('/Testpage/', methods=('GET', 'POST'))
+@protect
+def testpage():
+    db_model = Helldivers
+    page_name = "helldivers"
+    return render_page('Helldivers', page_name, db_model)
+
+def render_page(page_title, page_name, db_model):
+    form = CommentForm()
+    likeform = LikeForm()
+    purchasingform = AddToCartForm()
+    column_data = db_model.query.with_entities(db_model.comments, db_model.username).all()
+    num_likes = db_model.query.order_by(db_model.id).first().numLikes
+    if form.validate_on_submit():
+        new_info = db_model(
+            comments=form.comment.data,
+            username=current_user.name
+        )
+        db.session.add(new_info)
+        db.session.commit()
+        form = CommentForm()
+        return redirect(url_for('wiki.' + page_name))
+    elif likeform.validate_on_submit():
+        comment = db_model.query.order_by(db_model.id).first()
+        if comment:
+            increment_likes(comment.id, db_model)
+        return redirect(url_for('wiki.' + page_name + ''))
+    return render_template(page_name + '.html', page={'title': page_title}, form=form, column_data=column_data, numLikes=num_likes, likeform=likeform, purchasingform=purchasingform)
+
+
+@bp.route('/shopping_cart/', methods=['GET', 'POST'])
+@protect
+def shopping_cart():
+    form = ShoppingInfoForm()
+    total_price = 0
+    if form.validate_on_submit():
+        new_info = ShoppingInfo(
+            name=form.name.data,
+            address=form.address.data,
+            city=form.city.data,
+            state=form.state.data,
+            country=form.country.data,
+            zipcode=form.zipcode.data,
+            email=form.email.data,
+            phone_number=form.phone_number.data
+        )
+        db.session.add(new_info)
+        db.session.commit()
+
+        return redirect(url_for('wiki.purchasing'))
+
+    game_info = session.get('cart')
+    if game_info:
+        for item in game_info:
+            total_price += float(item['price'])
+
+    return render_template('shopping_cart.html', form=form,
+                           game_info=game_info, total_price=total_price)
+
+
+
+@bp.route('/remove_from_cart', methods=['POST'])
+@protect
+def remove_from_cart():
+    game_id = request.form.get('game_id')
+    if 'cart' in session:
+        updated_cart = [item for item in session['cart'] if item['id'] != int(game_id)]
+        session['cart'] = updated_cart
+    flash('Item removed from cart!', 'success')
+    return redirect(url_for('wiki.shopping_cart'))
+
+@bp.route('/success_page', methods=['GET', 'POST'])
+@protect
+def success_page():
+    shopping_info = ShoppingInfo.query.all()
+    return render_template('success_page.html', shopping_info=shopping_info)
+
+@bp.route('/purchasing/', methods=['GET', 'POST'])
+@protect
+def purchasing():
+    form = PurchasingForm()
+    if form.validate_on_submit():
+        return redirect(url_for('wiki.success_page'))
+    return render_template('purchasing_form.html', form=form)
+
+@bp.route('/user/')
+def user_index():
+    pass
+
+
 @bp.route('/user/login/', methods=['GET', 'POST'])
 def user_login():
     form = LoginForm()
@@ -137,7 +317,7 @@ def user_login():
         login_user(user)
         user.set('authenticated', True)
         flash('Login successful.', 'success')
-        return redirect(request.args.get("next") or url_for('wiki.index'))
+        return redirect(request.args.get("next") or url_for('wiki.home'))
     return render_template('login.html', form=form)
 
 
@@ -147,22 +327,33 @@ def user_logout():
     current_user.set('authenticated', False)
     logout_user()
     flash('Logout successful.', 'success')
-    return redirect(url_for('wiki.index'))
+    return redirect(url_for('wiki.home'))
 
 
-@bp.route('/user/')
-def user_index():
-    pass
+@bp.route('/user/page/', methods=['GET'])
+def user_page():
+    user_id = current_user.get_id()
+    page = current_wiki.get(f'user/{user_id}')
+    if page:
+        return render_template('page.html', page=page)
+    else:
+        flash('This user does not have a page. Create one now:')
+        return redirect(request.args.get("next") or url_for('wiki.edit', url=(f'user/{user_id}/')))
 
 
-@bp.route('/user/create/')
+@bp.route('/user/create/', methods=['GET', 'POST'])
 def user_create():
-    pass
-
-
-@bp.route('/user/<int:user_id>/')
-def user_admin(user_id):
-    pass
+    form = CreateForm()
+    if form.validate_on_submit():
+        username = form.name.data
+        password = form.password.data
+        user = (current_users.add_user(name=username, password=password, authentication_method='cleartext'))
+        login_user(user)
+        user.set('authenticated', True)
+        user_id = user.get_id()
+        flash('Account Creation successful.', 'success')
+        return redirect(request.args.get("next") or url_for('wiki.edit', url=(f'user/{user_id}/')))
+    return render_template('account.html', form=form)
 
 
 @bp.route('/user/delete/<int:user_id>/')
@@ -179,4 +370,3 @@ def user_delete(user_id):
 @bp.errorhandler(404)
 def page_not_found(error):
     return render_template('404.html'), 404
-

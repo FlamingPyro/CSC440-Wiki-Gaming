@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Success{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <h1>Success!</h1>
+    <p>Your information has been successfully submitted.</p>
+    <p><a href="{{ url_for('wiki.home') }}">Back to Home Page</a></p>
+</div>
+{% endblock %}

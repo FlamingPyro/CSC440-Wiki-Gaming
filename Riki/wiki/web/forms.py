@@ -7,6 +7,9 @@ from wtforms import BooleanField
 from wtforms import StringField
 from wtforms import TextAreaField
 from wtforms import PasswordField
+from wtforms import HiddenField
+from wtforms.fields.choices import SelectField
+from wtforms.fields.simple import SubmitField
 from wtforms.validators import InputRequired
 from wtforms.validators import ValidationError
 
@@ -39,7 +42,6 @@ class EditorForm(FlaskForm):
     body = TextAreaField('', [InputRequired()])
     tags = StringField('')
 
-
 class LoginForm(FlaskForm):
     name = StringField('', [InputRequired()])
     password = PasswordField('', [InputRequired()])
@@ -55,3 +57,49 @@ class LoginForm(FlaskForm):
             return
         if not user.check_password(field.data):
             raise ValidationError('Username and password do not match.')
+
+class CommentForm(FlaskForm):
+    comment = StringField('Comment: ', [InputRequired()])
+    submit_comment = SubmitField('Submit Comment')
+
+class LikeForm(FlaskForm):
+    submit_like = SubmitField('👍')
+
+class AddToCartForm(FlaskForm):
+    add_to_cart = SubmitField('Add to Cart')
+
+class ShoppingInfoForm(FlaskForm):
+    name = StringField('Name: ', [InputRequired()])
+    address = StringField('Address: ', [InputRequired()])
+    city = StringField('City:', [InputRequired()])
+    state = StringField('State: ', [InputRequired()])
+    country = SelectField('Country:', choices=[('US', 'United States'), ('CA', 'Canada'), ('UK', 'United Kingdom')],
+                          validators=[InputRequired()])
+    zipcode = StringField('ZIP: ', [InputRequired()])
+    email = StringField('Email: ', [InputRequired()])
+    phone_number = StringField('Phone#: ', [InputRequired()])
+
+    proceed_to_checkout = SubmitField('Proceed to Checkout')
+
+class PurchasingForm(FlaskForm):
+    credit_card_number = StringField('Credit Card:', [InputRequired()])
+    card_holder = StringField('Card holder:', [InputRequired()])
+    card_expiration_date = StringField('Card expiration M/Y:', [InputRequired()])
+    card_cvv = StringField('Card cvv:', [InputRequired()])
+
+    checkout = SubmitField('Checkout')
+
+class CreateForm(FlaskForm):
+    name = StringField('', [InputRequired()])
+    password = PasswordField('', [InputRequired()])
+
+    def validate_name(form, field):
+        user = current_users.get_user(field.data)
+        if user:
+            raise ValidationError('This username already exists.')
+
+    def validate_password(form, field):
+        pass  # todo
+
+class UserForm(FlaskForm):
+    pass

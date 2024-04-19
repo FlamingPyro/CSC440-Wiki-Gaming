@@ -8,7 +8,7 @@ from werkzeug.local import LocalProxy
 
 from wiki.core import Wiki
 from wiki.web.user import UserManager
-
+from .extensions import db
 class WikiError(Exception):
     pass
 
@@ -33,6 +33,8 @@ def create_app(directory):
     app = Flask(__name__)
     app.config['CONTENT_DIR'] = directory
     app.config['TITLE'] = 'wiki'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///comments.db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
     try:
         app.config.from_pyfile(
             os.path.join(app.config.get('CONTENT_DIR'), 'config.py')
@@ -40,6 +42,8 @@ def create_app(directory):
     except IOError:
         msg = "You need to place a config.py in your content directory."
         raise WikiError(msg)
+
+    db.init_app(app)
 
     loginmanager.init_app(app)
 

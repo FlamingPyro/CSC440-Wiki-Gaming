@@ -1,9 +1,24 @@
 {% extends "base.html" %}
-{% block title -%}
-	Welcome to your new wiki!
+{% block title %}
+    Wiki Gaming
 {% endblock title %}
 
 {% block content %}
-<p>You did not create any content yet. Your wiki recommends you, to do so now, as every user will see this page first, and you would want to make a good impression, wouldn't you?</p>
-<p><a href="{{ url_for('wiki.edit', url='home') }}" class="btn btn-success">Create a homepage</a></p>
+    <div>
+        <h2>Featured Games</h2>
+        <div style="display: flex; flex-wrap: wrap;">
+            {% for game in home_data %}
+            <div style="flex: 1; margin: 10px; border: 1px solid #ccc; padding: 10px;">
+                <h3>{{ game.name }}</h3>
+                <a href={{ game.name }}><img src="{{ url_for('static', filename='images/' + game.icon) }}" alt="{{ game.name }}" width="200px" height="200px"></a>
+                <p>Price: ${{ game.price }}</p>
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    {{ form.add_to_cart(class="btn btn-primary") }}
+                    <input type="hidden" name="game_id" value="{{ game.id }}">
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
