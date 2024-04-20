@@ -29,7 +29,13 @@
 </head>
 
 
-    <img src="https://image.api.playstation.com/vulcan/ap/rnd/202107/3100/HO8vkO9pfXhwbHi5WHECQJdN.png" alt="HorizonForbiddenWest" class="img-fluid">
+    <img src="/static/images/horizonforbiddenwest.png" alt="Horizon Forbidden West" class="img-fluid">
+    <p>
+        Join Aloy as she braves a majestic but dangerous new frontier that holds mysterious new threats.
+        Explore distant lands, fight bigger and more awe-inspiring machines,
+        and encounter astonishing new tribes as you return to the far-future,
+        post-apocalyptic world of Horizon.
+    </p>
 
     <form method="post" action="{{ url_for('wiki.horizonforbiddenwest') }}">
         <!-- Like Form -->
@@ -62,12 +68,5 @@
     </div>
 </body>
 
-{% for field, errors in form.errors.items() %}
-        <ul>
-            {% for error in errors %}
-                <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-    {% endfor %}
 {% endblock %}
 
