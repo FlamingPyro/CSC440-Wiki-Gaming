@@ -61,13 +61,5 @@
         </ul>
     </div>
 </body>
-
-{% for field, errors in form.errors.items() %}
-        <ul>
-            {% for error in errors %}
-                <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-    {% endfor %}
 {% endblock %}
 

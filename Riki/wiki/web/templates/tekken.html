@@ -28,8 +28,7 @@
     </style>
 </head>
 
-
-    <img src="/static/images/tekken.png" alt="Tekken8" class="img-fluid">
+    <img src="/static/images/tekken.png" alt="Tekken 8" class="img-fluid">
 
     <form method="post" action="{{ url_for('wiki.tekken') }}">
         <!-- Like Form -->
@@ -62,12 +61,5 @@
     </div>
 </body>
 
-{% for field, errors in form.errors.items() %}
-        <ul>
-            {% for error in errors %}
-                <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-    {% endfor %}
 {% endblock %}
 
