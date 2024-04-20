@@ -36,7 +36,7 @@ from wiki.web.user import protect
 from .models import ShoppingInfo, HomeDatabase, Helldivers, Tekken, LethalCompany, Minecraft, Destiny, Palworld, EldenRing, HorizonForbiddenWest
 
 from .extensions import db
-from .helper import increment_likes
+
 
 
 
@@ -247,6 +247,12 @@ def render_page(page_title, page_name, db_model):
             increment_likes(comment.id, db_model)
         return redirect(url_for('wiki.' + page_name + ''))
     return render_template(page_name + '.html', page={'title': page_title}, form=form, column_data=column_data, numLikes=num_likes, likeform=likeform, purchasingform=purchasingform)
+
+def increment_likes(item_id, db_model):
+    item = db_model.query.get(item_id)
+    if item:
+        item.numLikes += 1
+        db.session.commit()
 
 
 @bp.route('/shopping_cart/', methods=['GET', 'POST'])
