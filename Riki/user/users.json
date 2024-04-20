@@ -110,5 +110,13 @@
     "authentication_method": "cleartext",
     "authenticated": true,
     "password": "43pearsnoway"
+  },
+  "123": {
+    "user_id": 15,
+    "active": true,
+    "roles": [],
+    "authentication_method": "cleartext",
+    "authenticated": true,
+    "password": "123"
   }
 }
