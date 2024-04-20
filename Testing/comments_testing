@@ -1,0 +1,18 @@
+Comments Page Integration Testing
+
+Clicked Like button on Tekken page	SUCCESS: Like counter incremented
+Added a Comment on Tekken page	SUCCESS: Comment added
+Clicked Like button on Destiny 2 page	SUCCESS: Like counter incremented
+Added a Comment on Destiny 2 page	SUCCESS: Comment added
+Clicked Like button on Elden Ring page	SUCCESS: Like counter incremented
+Added a Comment on Elden Ring page	SUCCESS: Comment added
+Clicked Like button on Horizon Forbidden West page	SUCCESS: Like counter incremented
+Added a Comment on Horizon Forbidden West page	SUCCESS: Comment added
+Clicked Like button on Lethal Company page	SUCCESS: Like counter incremented
+Added a Comment on Lethal Company page	SUCCESS: Comment added
+Clicked Like button on Minecraft page	SUCCESS: Like counter incremented
+Added a Comment on Minecraft page	SUCCESS: Comment added
+Clicked Like button on Palworld page	SUCCESS: Like counter incremented
+Added a Comment on Palworld page	SUCCESS: Comment added
+Clicked Like button on Helldivers page	SUCCESS: Like counter incremented
+Added a Comment on Helldivers page	SUCCESS: Comment added
