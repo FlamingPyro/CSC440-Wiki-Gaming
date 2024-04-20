@@ -12,3 +12,11 @@ user page not started
 user account creation user_id attribute
 user page creation nearly finished, running into issues, will be resolved early in production week
 tests will be written early in production week
+
+... 4/20/24
+
+330 lines of code
+
+user page creation implemented
+integration tests created for user accounts and user pages
+final product delivered and all requirements met
