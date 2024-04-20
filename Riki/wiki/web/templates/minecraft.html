@@ -29,7 +29,13 @@
 </head>
 
 
-    <img src="/static/images/minecraft.png" alt="ModernWarfare2" class="img-fluid">
+    <img src="/static/images/minecraft.png" alt="Minecraft" class="img-fluid">
+    <p>
+        Minecraft is a game made up of blocks, creatures, and community.
+        You can survive the night or build a work of art – the choice is all yours.
+        But if the thought of exploring a vast new world all on your own feels overwhelming,
+        then fear not! Let’s explore what Minecraft is all about!
+    </p>
 
     <form method="post" action="{{ url_for('wiki.minecraft') }}">
         <!-- Like Form -->
@@ -62,12 +68,5 @@
     </div>
 </body>
 
-{% for field, errors in form.errors.items() %}
-        <ul>
-            {% for error in errors %}
-                <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-    {% endfor %}
 {% endblock %}
 
