@@ -28,10 +28,18 @@
     </style>
 </head>
 
+
     <img src="/static/images/destiny2.png" alt="Destiny 2" class="img-fluid">
+    <p>
+        Dive into the world of Destiny 2 to explore the mysteries of the solar system
+        and experience responsive first-person shooter combat.
+        Unlock powerful elemental abilities and collect unique gear to customize your
+        Guardian's look and playstyle. Enjoy Destiny 2’s cinematic story, challenging co-op missions,
+        and a variety of PvP modes alone or with friends.
+    </p>
 
     <form method="post" action="{{ url_for('wiki.destiny') }}">
-
+        <!-- Like Form -->
         {{ likeform.hidden_tag() }}
         {{ likeform.submit_like(class="btn btn-primary") }}
         Likes: {{numLikes}}
@@ -39,13 +47,14 @@
 
     <form method="post" action="{{ url_for('wiki.destiny') }}">
     {{ form.hidden_tag() }}
-
+    <!-- Main Comment Form -->
     <div class="form-group">
         {{ form.comment.label }}
         {{ form.comment(class="form-control") }}
     </div>
     {{ form.submit_comment(class="btn btn-primary") }}
     </form>
+
 
 <body>
     <div class="comments-section">
@@ -60,12 +69,5 @@
     </div>
 </body>
 
-{% for field, errors in form.errors.items() %}
-        <ul>
-            {% for error in errors %}
-                <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-    {% endfor %}
 {% endblock %}
 
