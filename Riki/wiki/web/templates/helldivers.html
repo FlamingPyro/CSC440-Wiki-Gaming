@@ -30,6 +30,13 @@
 
 
     <img src=/static/images/helldivers.png alt="HellDivers" class="img-fluid">
+    <p>
+        Freedom. Peace. Democracy.
+        Your Super Earth-born rights. The key pillars of our civilization.
+        Of our very existence.
+        But the war rages on. And everything is once again under threat.
+        Join the greatest military force the galaxy has ever seen and make this a safe and free place to live.
+    </p>
 
     <form method="post" action="{{ url_for('wiki.helldivers') }}">
         <!-- Like Form -->
@@ -61,12 +68,5 @@
     </div>
 </body>
 
-{% for field, errors in form.errors.items() %}
-        <ul>
-            {% for error in errors %}
-                <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-    {% endfor %}
 {% endblock %}
 
