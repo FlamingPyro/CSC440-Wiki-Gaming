@@ -30,6 +30,12 @@
 
 
     <img src="/static/images/palworld.png" alt="Palworld" class="img-fluid">
+    <p>
+        In this game, you can peacefully live alongside mysterious creatures known as Pals
+        or risk your life to drive off a ruthless poaching syndicate.
+        Pals can be used to fight, or they can be made to work on farms or factories.
+        You can even sell them or eat them!
+    </p>
 
     <form method="post" action="{{ url_for('wiki.palworld') }}">
         <!-- Like Form -->
@@ -62,12 +68,5 @@
     </div>
 </body>
 
-{% for field, errors in form.errors.items() %}
-        <ul>
-            {% for error in errors %}
-                <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-    {% endfor %}
 {% endblock %}
 
