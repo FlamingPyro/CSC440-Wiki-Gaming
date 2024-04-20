@@ -1,0 +1,31 @@
+LoC for comments/liking feature:
+
+Total LoC added in routes.py: 57
+
+Total LoC added in models.py: 41
+
+Total LoC added in comments_db.py: 78
+
+Total LoC added in destiny.html: 64
+
+Total LoC added in eldenring.html: 63
+
+Total LoC added in helldivers.html: 64
+
+Total LoC added in horizonforbiddenwest.html: 63
+
+Total LoC added in lethalcompany.html: 65
+
+Total LoC added in minecraft.html: 63
+
+Total LoC added in palworld.html: 63
+
+Total LoC added in tekken.html: 63
+
+--------------------------------------------------------
+
+Total LoC added: 684
+
+Total LoC of Python: 176
+
+Total LoC of Flask/Jinja/HTML: 508
