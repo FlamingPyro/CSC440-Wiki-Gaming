@@ -160,71 +160,36 @@ def search():
 @bp.route('/Tekken/', methods=('GET', 'POST'))
 @protect
 def tekken():
-    db_model = Tekken
-    page_name = "tekken"
-    return render_page('Tekken', page_name, db_model)
-
+    return render_page('Tekken', "tekken", Tekken)
 @bp.route('/Destiny/', methods=('GET', 'POST'))
 @protect
 def destiny():
-    db_model = Destiny
-    page_name = "destiny"
-    return render_page('Destiny 2', page_name, db_model)
-
+    return render_page('Destiny 2', "destiny", Destiny)
 @bp.route('/Elden/', methods=('GET', 'POST'))
 @protect
 def eldenring():
-    db_model = EldenRing
-    page_name = "eldenring"
-    return render_page('Elden Ring', page_name, db_model)
-
+    return render_page('Elden Ring', "eldenring", EldenRing)
 @bp.route('/Horizon/', methods=('GET', 'POST'))
 @protect
 def horizonforbiddenwest():
-    db_model = HorizonForbiddenWest
-    page_name = "horizonforbiddenwest"
-    return render_page('Horizon Forbidden West', page_name, db_model)
-
-
+    return render_page('Horizon Forbidden West', "horizonforbiddenwest", HorizonForbiddenWest)
 @bp.route('/Lethal/', methods=('GET', 'POST'))
 @protect
 def lethalcompany():
-    db_model = LethalCompany
-    page_name = "lethalcompany"
-    return render_page('Lethal Company', page_name, db_model)
-
-
+    return render_page('Lethal Company', "lethalcompany", LethalCompany)
 @bp.route('/Minecraft/', methods=('GET', 'POST'))
 @protect
 def minecraft():
-    db_model = Minecraft
-    page_name = "minecraft"
-    return render_page('Minecraft', page_name, db_model)
-
-
+    return render_page('Minecraft', "minecraft", Minecraft)
 @bp.route('/Palworld/', methods=('GET', 'POST'))
 @protect
 def palworld():
-    db_model = Palworld
-    page_name = "palworld"
-    return render_page('Palworld', page_name, db_model)
-
-
+    return render_page('Palworld', "palworld", Palworld)
 @bp.route('/Helldivers/', methods=('GET', 'POST'))
 @protect
 def helldivers():
-    db_model = Helldivers
-    page_name = "helldivers"
-    return render_page('Helldivers', page_name, db_model)
+    return render_page('Helldivers', "helldivers", Helldivers)
 
-
-#REMOVE BEFORE SUBMITTING
-@bp.route('/Testpage/', methods=('GET', 'POST'))
-@protect
-def testpage():
-    db_model = Helldivers
-    page_name = "helldivers"
-    return render_page('Helldivers', page_name, db_model)
 
 def render_page(page_title, page_name, db_model):
     form = CommentForm()
