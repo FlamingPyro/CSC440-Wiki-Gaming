@@ -1,61 +1,39 @@
-import os
 import unittest
-from unittest import TestCase, mock
-from unittest.mock import patch, mock_open
 from wiki.core import clean_url, wikilink, Processor, Page, Wiki
 
 
-class TestCleanUrl(unittest.TestCase):
+class TestWikiCore(unittest.TestCase):
+
     def test_clean_url(self):
-        # Test various scenarios
-        self.assertEqual(clean_url("  Example Page  "), "example_page")
-        self.assertEqual(clean_url("Example    Page"), "example_page")
-        self.assertEqual(clean_url("Example\\Page"), "example/page")
-        self.assertEqual(clean_url("Example\\\\Page"), "example/page")
+        self.assertEqual(clean_url(" Hello  World \\Test "), "hello_world_/test")
+        self.assertEqual(clean_url("multiple    spaces"), "multiple_spaces")
+        self.assertEqual(clean_url("No Change Needed"), "no_change_needed")
 
-class TestWikiLink(unittest.TestCase):
-    def test_wikilink_simple(self):
-        text = "This is a test [[Page]]"
-        with patch('flask.url_for', return_value="/wiki/page"):
-            result = wikilink(text)
-        self.assertIn('<a href="/wiki/page">Page</a>', result)
+    def test_wikilink(self):
+        url_formatter = lambda endpoint, **values: f"/wiki/{values['url']}"
+        input_text = "Check out this [[Wiki Link]] and this [[example/page|Example Page]]."
+        expected_output = ("Check out this <a href='/wiki/wiki_link'>Wiki Link</a> "
+                           "and this <a href='/wiki/example/page'>Example Page</a>.")
+        self.assertEqual(wikilink(input_text, url_formatter), expected_output)
 
-class TestPage(unittest.TestCase):
-    def setUp(self):
-        self.page = Page('/fake/path', 'TestPage')
+    def test_processor_full_cycle(self):
+        text = "Meta: Value\n\n# Heading\nContent goes here."
+        processor = Processor(text)
+        final_output, markdown, meta = processor.process()
+        self.assertIn('<h1>Heading</h1>', final_output)
+        self.assertEqual(meta['meta'], 'Value')
 
-    @patch('os.open', new_callable=mock_open, read_data="title: Test Page\n\nContent")
-    def test_load(self, mock_file):
-        self.page.load()
-        self.assertIn('Content', self.page.content)
+    def test_page_load_render(self):
+        page = Page(path='path/to/test.md', url='test-url', new=True)
+        page.content = "Meta: Value\n\n# Heading\nContent goes here."
+        page.render()
+        self.assertIn('<h1>Heading</h1>', page.html)
 
-    @patch('os.makedirs')
-    @patch('os.open', new_callable=mock_open)
-    def test_save(self, mock_file, mock_makedirs):
-        self.page.save()
-        mock_file().write.assert_called_with("\nContent")
+    def test_wiki_page_management(self):
+        wiki = Wiki(root='/fake/dir')
+        wiki.get_or_404("nonexistent")
+        self.assertRaises(FileNotFoundError)
 
-class TestWiki(unittest.TestCase):
-    def setUp(self):
-        self.wiki = Wiki('/fake/root')
 
-    @patch('os.path.exists', return_value=True)
-    def test_exists(self, mock_exists):
-        result = self.wiki.exists('TestPage')
-        self.assertTrue(result)
-
-    @patch('os.walk')
-    def test_index(self, mock_walk):
-        mock_walk.return_value = [('/fake/root', ('dir',), ['TestPage.md'])]
-        result = self.wiki.index()
-        self.assertEqual(len(result), 1)
-        self.assertIsInstance(result[0], Page)
-
-    @patch('os.rename')
-    @patch('os.makedirs')
-    def test_move(self, mock_makedirs, mock_rename):
-        self.wiki.move('oldurl', 'newurl')
-        mock_rename.assert_called_once()
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

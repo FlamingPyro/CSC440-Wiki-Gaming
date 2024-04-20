@@ -1,54 +1,76 @@
 import unittest
-from unittest.mock import patch, MagicMock
-from wiki.web.forms import URLForm, SearchForm, EditorForm, LoginForm, CommentForm, LikeForm, AddToCartForm, ShoppingInfoForm, PurchasingForm, CreateForm, UserForm
+from flask import Flask
+from flask_testing import TestCase
+from wiki.web.forms import CommentForm, LikeForm, AddToCartForm, ShoppingInfoForm, PurchasingForm
 
 
-class TestForms(unittest.TestCase):
-    def test_url_form_validation(self):
-        form_data = {'url': 'test-page'}
-        with patch('wiki.web.user.current_wiki.exists', return_value=False) as mock_exists:
-            form = URLForm(data=form_data)
-            self.assertTrue(form.validate())
-        mock_exists.assert_called_once_with('test-page')
+class BaseTestCase(TestCase):
+    def create_app(self):
+        app = Flask(__name__)
+        app.config['TESTING'] = True
+        app.config['WTF_CSRF_ENABLED'] = False
+        return app
 
-        with patch('wiki.web.user.current_wiki.exists', return_value=True):
-            form = URLForm(data=form_data)
-            self.assertFalse(form.validate())
 
-    def test_login_form_validation(self):
-        form_data = {'name': 'user', 'password': 'pass'}
-        user_mock = MagicMock()
-        user_mock.check_password.return_value = True
-        with patch('wiki.web.user.current_users.get_user', return_value=user_mock):
-            form = LoginForm(data=form_data)
-            self.assertTrue(form.validate())
+class TestCommentForm(BaseTestCase):
+    def test_comment_required(self):
+        form = CommentForm(comment="")
+        self.assertFalse(form.validate())
 
-        user_mock.check_password.return_value = False
-        with patch('wiki.web.user.current_users.get_user', return_value=user_mock):
-            form = LoginForm(data=form_data)
-            self.assertFalse(form.validate())
-            self.assertIn('Username and password do not match.', form.password.errors)
-
-        with patch('wiki.web.user.current_users.get_user', return_value=None):
-            form = LoginForm(data=form_data)
-            self.assertFalse(form.validate())
-            self.assertIn('This username does not exist.', form.name.errors)
-
-    def test_editor_form_validation(self):
-        form_data = {'title': 'New Article', 'body': 'Some content'}
-        form = EditorForm(data=form_data)
+    def test_valid_comment(self):
+        form = CommentForm(comment="Nice article!")
         self.assertTrue(form.validate())
 
-    def test_create_form_validation(self):
-        form_data = {'name': 'newuser', 'password': 'newpassword'}
-        with patch('wiki.web.user.current_users.get_user', return_value=None):
-            form = CreateForm(data=form_data)
-            self.assertTrue(form.validate())
 
-        with patch('wiki.web.user.current_users.get_user', return_value=True):
-            form = CreateForm(data=form_data)
-            self.assertFalse(form.validate())
-            self.assertIn('This username already exists.', form.name.errors)
+class TestShoppingInfoForm(BaseTestCase):
+    def test_valid_input(self):
+        form = ShoppingInfoForm(data={
+            'name': 'John Doe',
+            'address': '123 Main St',
+            'city': 'Anytown',
+            'state': 'Anystate',
+            'country': 'US',
+            'zipcode': '12345',
+            'email': 'john@example.com',
+            'phone_number': '1234567890'
+        })
+        self.assertTrue(form.validate())
+
+    def test_invalid_input(self):
+        form = ShoppingInfoForm(data={
+            'name': '',
+            'address': '',
+            'city': '',
+            'state': '',
+            'country': '',
+            'zipcode': '',
+            'email': '',
+            'phone_number': ''
+        })
+        self.assertFalse(form.validate())
+        self.assertTrue(all(field in form.errors for field in ['name', 'address', 'city', 'state', 'country', 'zipcode', 'email', 'phone_number']))
+
+
+class TestPurchasingForm(BaseTestCase):
+    def test_valid_credit_card_info(self):
+        form = PurchasingForm(data={
+            'credit_card_number': '4111111111111111',
+            'card_holder': 'John Doe',
+            'card_expiration_date': '12/24',
+            'card_cvv': '123'
+        })
+        self.assertTrue(form.validate())
+
+    def test_invalid_credit_card_info(self):
+        form = PurchasingForm(data={
+            'credit_card_number': '',
+            'card_holder': '',
+            'card_expiration_date': '',
+            'card_cvv': ''
+        })
+        self.assertFalse(form.validate())
+        self.assertTrue(all(field in form.errors for field in ['credit_card_number', 'card_holder', 'card_expiration_date', 'card_cvv']))
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,68 +1,69 @@
 import unittest
-from sqlite3 import IntegrityError
+from wiki.web.extensions import db
+from wiki.web.models import Destiny, LethalCompany, ShoppingInfo, HomeDatabase
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_testing import TestCase
-from sqlalchemy.testing import db
-from wiki.web.models import Destiny, LethalCompany, Minecraft, Tekken, EldenRing, Palworld, HorizonForbiddenWest, Helldivers, ShoppingInfo, HomeDatabase
 
-
-class BaseTestCase(TestCase):
-    def create_app(self):
+class ModelTestCase(unittest.TestCase):
+    def setUp(self):
         app = Flask(__name__)
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
         app.config['TESTING'] = True
         app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-        return app
-
-    def setUp(self):
-        db.create_all()
+        db.init_app(app)
+        with app.app_context():
+            db.create_all()
+        self.app = app
 
     def tearDown(self):
-        db.session.remove()
-        db.drop_all()
+        with self.app.app_context():
+            db.session.remove()
+            db.drop_all()
 
-
-class TestModels(BaseTestCase):
     def test_destiny_model(self):
-        # Create an instance of the Destiny model
-        destiny = Destiny(username='player1', comments='Great game!', numLikes=10)
-        db.session.add(destiny)
-        db.session.commit()
-
-        # Retrieve the instance back
-        retrieved = Destiny.query.first()
-        self.assertEqual(retrieved.username, 'player1')
-        self.assertEqual(retrieved.comments, 'Great game!')
-        self.assertEqual(retrieved.numLikes, 10)
-
-    def test_lethal_company_defaults(self):
-        # Test default values
-        lethal = LethalCompany(username='player2', comments='Challenging missions')
-        db.session.add(lethal)
-        db.session.commit()
-
-        retrieved = LethalCompany.query.first()
-        self.assertEqual(retrieved.numLikes, 0)  # Default value check
-
-    def test_shopping_info_constraints(self):
-        # Ensure nullable constraints are respected
-        shopping = ShoppingInfo(name='John Doe', address='123 Elm St', city='Springfield', state='IL',
-                                country='USA', zipcode='62704', email='johndoe@example.com', phone_number='555-1234')
-        db.session.add(shopping)
-        db.session.commit()
-
-        retrieved = ShoppingInfo.query.first()
-        self.assertEqual(retrieved.email, 'johndoe@example.com')
-
-    def test_home_database_not_nullable(self):
-        # Test not nullable fields
-        home = HomeDatabase(name='Elegant Home', icon='icon.png', price='350000')
-        db.session.add(home)
-        try:
+        with self.app.app_context():
+            model_instance = Destiny(username='testuser', comments='A sample comment', numLikes=15)
+            db.session.add(model_instance)
             db.session.commit()
-        except Exception as e:
-            self.assertTrue(isinstance(e, IntegrityError))
+            queried_instance = Destiny.query.first()
+            self.assertEqual(queried_instance.username, 'testuser')
+            self.assertEqual(queried_instance.comments, 'A sample comment')
+            self.assertEqual(queried_instance.numLikes, 15)
+
+    def test_lethal_company_model(self):
+        with self.app.app_context():
+            model_instance = LethalCompany(username='user123', comments='Another comment', numLikes=20)
+            db.session.add(model_instance)
+            db.session.commit()
+            queried_instance = LethalCompany.query.first()
+            self.assertEqual(queried_instance.username, 'user123')
+            self.assertEqual(queried_instance.comments, 'Another comment')
+            self.assertEqual(queried_instance.numLikes, 20)
+
+    def test_shopping_info_model(self):
+        with self.app.app_context():
+            model_instance = ShoppingInfo(
+                name='Store A', address='123 Market St', city='Anytown',
+                state='Anystate', country='Anycountry', zipcode='12345',
+                email='contact@storea.com', phone_number='123-456-7890'
+            )
+            db.session.add(model_instance)
+            db.session.commit()
+            queried_instance = ShoppingInfo.query.first()
+            self.assertEqual(queried_instance.name, 'Store A')
+            self.assertEqual(queried_instance.address, '123 Market St')
+            self.assertEqual(queried_instance.city, 'Anytown')
+            self.assertEqual(queried_instance.email, 'contact@storea.com')
+            self.assertEqual(queried_instance.phone_number, '123-456-7890')
+
+    def test_home_database_model(self):
+        with self.app.app_context():
+            model_instance = HomeDatabase(name='Lamp', icon='icon.png', price='9.99')
+            db.session.add(model_instance)
+            db.session.commit()
+            queried_instance = HomeDatabase.query.first()
+            self.assertEqual(queried_instance.name, 'Lamp')
+            self.assertEqual(queried_instance.icon, 'icon.png')
+            self.assertEqual(queried_instance.price, '9.99')
 
 if __name__ == '__main__':
     unittest.main()
